@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, send_file, abort
+from flask import Flask, request, jsonify, send_file, abort, make_response
 import os
 import openai
 from flask_cors import CORS
@@ -11,15 +11,16 @@ from flask_limiter.util import get_remote_address
 app = Flask(__name__)
 
 # Uppdaterad CORS-konfiguration
-CORS(app, resources={r"/*": {"origins": "https://thomassimplineers.github.io"}},
-     expose_headers="Authorization",
-     supports_credentials=False)
+CORS(app, resources={r"/ask_gpt": {"origins": "https://thomassimplineers.github.io"}},
+     allow_headers=["Content-Type", "Authorization"],
+     supports_credentials=True)
 
 # Rate Limiting för att förhindra missbruk av API:t
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["200 per day", "50 per hour"]
+    default_limits=["200 per day", "50 per hour"],
+    headers_enabled=True
 )
 
 # Hämta API-nycklar från miljövariabler
@@ -30,11 +31,17 @@ backend_api_key = os.getenv('BACKEND_API_KEY')
 player_data = pd.read_csv('data/players_raw.csv')
 
 # Route för att ställa frågor till GPT
-@ask_gpt.before_request
-def before_ask_gpt():
+@app.route('/ask_gpt', methods=['POST', 'OPTIONS'])
+@limiter.limit("10 per minute", methods=["POST"])
+def ask_gpt():
     if request.method == 'OPTIONS':
-        # Tillåt OPTIONS-förfrågningar utan autentisering
-        return
+        # Hantera preflight-förfrågan
+        response = make_response()
+        response.headers.add("Access-Control-Allow-Origin", "https://thomassimplineers.github.io")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
+        response.headers.add("Access-Control-Allow-Methods", "POST,OPTIONS")
+        return response
+
     # Kontrollera API-nyckel från förfrågan
     request_api_key = request.headers.get('Authorization')
     if request_api_key != backend_api_key:
