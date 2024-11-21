@@ -4,15 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FPL Analyzer</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Välkommen till FPL Analyzer</h1>
-    <button id="download-button">Ladda ner Spelardata</button>
-    <input type="text" id="question-input" placeholder="Ställ en fråga...">
-    <button id="ask-button">Fråga GPT</button>
-    <div id="answer-output"></div>
-<script src="app.js" defer></script>
-
-    <!-- Lägg till din frontend-kod här -->
+    <div class="container">
+        <h1>Välkommen till FPL Analyzer</h1>
+        <button id="download-button">Ladda ner Spelardata</button>
+        <br><br>
+        <input type="text" id="question-input" placeholder="Ställ en fråga...">
+        <button id="ask-button">Fråga GPT</button>
+        <div id="answer-output"></div>
+    </div>
+    <script src="app.js" defer></script>
 </body>
 </html>
