@@ -10,34 +10,28 @@ from flask_limiter.util import get_remote_address
 # Skapa Flask-applikationen
 app = Flask(__name__)
 
-# CORS-konfiguration för att tillåta cross-origin-förfrågningar från GitHub Pages
-CORS(app, resources={r"/*": {"origins": "https://thomassimplineers.github.io"}}, 
-     supports_credentials=True,
-     allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
-     methods=["GET", "POST", "OPTIONS"])
+# Uppdaterad CORS-konfiguration
+CORS(app, resources={r"/*": {"origins": "https://thomassimplineers.github.io"}},
+     allow_headers=["Content-Type", "Authorization"])
 
 # Rate Limiting för att förhindra missbruk av API:t
 limiter = Limiter(
     get_remote_address,
     app=app,
-    default_limits=["200 per day", "50 per hour"]  # Gräns på antalet förfrågningar per användare
+    default_limits=["200 per day", "50 per hour"]
 )
 
 # Hämta API-nycklar från miljövariabler
-openai.api_key = os.getenv('OPENAI_API_KEY')  # OpenAI API-nyckeln
-backend_api_key = os.getenv('BACKEND_API_KEY')  # Backend-nyckeln för autentisering
+openai.api_key = os.getenv('OPENAI_API_KEY')
+backend_api_key = os.getenv('BACKEND_API_KEY')
 
 # Ladda in data från CSV-fil
 player_data = pd.read_csv('data/players_raw.csv')
 
 # Route för att ställa frågor till GPT
-@app.route('/ask_gpt', methods=['OPTIONS', 'POST'])
-@limiter.limit("10 per minute")  # Ytterligare begränsning för att undvika missbruk av endpointen
+@app.route('/ask_gpt', methods=['POST'])
+@limiter.limit("10 per minute", methods=["POST"])  # Exkludera OPTIONS från rate limiting
 def ask_gpt():
-    if request.method == 'OPTIONS':
-        # Hantera preflight-förfrågan (OPTIONS) och skicka tillbaka rätt CORS-headers
-        return jsonify({'message': 'CORS preflight successful'}), 200
-
     # Kontrollera API-nyckel från förfrågan
     request_api_key = request.headers.get('Authorization')
     if request_api_key != backend_api_key:
@@ -47,7 +41,7 @@ def ask_gpt():
     data = request.get_json()
     question = data.get('question', '')
     prompt = f"Analysera följande data och besvara frågan: {question}\nData: {player_data.head(5).to_json(orient='records')}"
-    
+
     try:
         response = openai.Completion.create(
             engine="text-davinci-003",
@@ -60,17 +54,15 @@ def ask_gpt():
 
     return jsonify({'answer': answer})
 
-# Route för att ladda ner Excel-fil
+# Route för att ladda ner Excel-fil (exempel på annan route)
 @app.route('/download_excel', methods=['GET'])
-@limiter.limit("5 per minute")  # Begränsning för att förhindra för många nedladdningar
+@limiter.limit("5 per minute")
 def download_excel():
-    # Skapa en Excel-fil från spelardatan
     output = BytesIO()
     writer = pd.ExcelWriter(output, engine='openpyxl')
     player_data.to_excel(writer, index=False)
     writer.save()
     output.seek(0)
-    
     return send_file(
         output,
         mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
