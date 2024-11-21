@@ -16,19 +16,24 @@ document.getElementById('ask-button').addEventListener('click', async () => {
 });
 
 async function askGPT(question) {
-  try {
-    const response = await fetch('https://fpl-analyzer-backend.herokuapp.com/ask_gpt', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'DinBackendAPIKey'  // Ersätt med den faktiska backend API-nyckeln
-      },
-      body: JSON.stringify({ question: question })
-    });
+  const response = await fetch('https://fpl-analyzer-backend.herokuapp.com/ask_gpt', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'din-backend-api-nyckel-här'  // Lägg till din BACKEND_API_KEY här
+    },
+    body: JSON.stringify({ question: question })
+  });
 
-    if (!response.ok) {
-      throw new Error(`Nätverksfel: ${response.status} ${response.statusText}`);
-    }
+  // Hantera svar och fel
+  if (!response.ok) {
+    console.error('Fel vid GPT-anropet:', await response.json());
+    return 'Ett fel uppstod vid anropet till GPT.';
+  }
+
+  const data = await response.json();
+  return data.answer;
+}
 
     const data = await response.json();
     return data.answer;
