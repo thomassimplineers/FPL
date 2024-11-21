@@ -4,24 +4,57 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Poppins', sans-serif;
+    background-color: #f3f4f6; /* Ljusgrå bakgrundsfärg */
 }
 
 .container {
     text-align: center;
-    padding: 20px;
+    padding: 30px;
     background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    max-width: 400px;
 }
 
-button, input {
-    padding: 10px;
+h1 {
+    font-weight: 600;
+    color: #333333; /* Mörkgrå färg för rubriken */
+}
+
+button {
+    padding: 12px 20px;
     margin: 10px;
     font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    color: #ffffff; /* Vit text på knapparna */
+    background-color: #007bff; /* Modern blå färg */
+}
+
+button:hover {
+    background-color: #0056b3; /* Mörkare blå för hover */
+    transform: translateY(-2px); /* Lätt lyfteffekt när man hovrar */
 }
 
 input[type="text"] {
     width: 300px;
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+}
+
+input[type="text"]:focus {
+    border-color: #007bff; /* Blå färg för input när man fokuserar */
+}
+
+#answer-output {
+    margin-top: 20px;
+    font-weight: 300;
+    color: #555555; /* Mjukare grå färg för svaren */
 }
