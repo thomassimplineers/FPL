@@ -12,7 +12,8 @@ app = Flask(__name__)
 
 # Uppdaterad CORS-konfiguration
 CORS(app, resources={r"/*": {"origins": "https://thomassimplineers.github.io"}},
-     allow_headers=["Content-Type", "Authorization"])
+     expose_headers="Authorization",
+     supports_credentials=False)
 
 # Rate Limiting för att förhindra missbruk av API:t
 limiter = Limiter(
@@ -29,9 +30,11 @@ backend_api_key = os.getenv('BACKEND_API_KEY')
 player_data = pd.read_csv('data/players_raw.csv')
 
 # Route för att ställa frågor till GPT
-@app.route('/ask_gpt', methods=['POST'])
-@limiter.limit("10 per minute", methods=["POST"])  # Exkludera OPTIONS från rate limiting
-def ask_gpt():
+@ask_gpt.before_request
+def before_ask_gpt():
+    if request.method == 'OPTIONS':
+        # Tillåt OPTIONS-förfrågningar utan autentisering
+        return
     # Kontrollera API-nyckel från förfrågan
     request_api_key = request.headers.get('Authorization')
     if request_api_key != backend_api_key:
