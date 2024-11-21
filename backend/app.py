@@ -57,3 +57,15 @@ def download_analysis():
     writer = pd.ExcelWriter(output, engine='openpyxl')
     analyzed_data.to_excel(writer, index=False, sheet_name='Spelaranalys')
     writer.save()
+    output.seek(0)
+
+    return send_file(
+        output,
+        mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        as_attachment=True,
+        attachment_filename='analyserad_spelardata.xlsx'
+    )
+
+# Kör applikationen (endast för lokal utveckling, inte i produktionsmiljö)
+if __name__ == '__main__':
+    app.run(debug=True)
