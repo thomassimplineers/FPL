@@ -22,17 +22,20 @@ async function askGPT(question) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'my_secure_key_12345'  // Lägg till din BACKEND_API_KEY här
+      'Authorization': 'din-backend-api-nyckel-här'
     },
     body: JSON.stringify({ question: question })
   });
 
-  // Hantera fel
   if (!response.ok) {
     const errorData = await response.json();
     console.error('Fel vid GPT-anropet:', errorData);
     return 'Ett fel uppstod vid anropet till GPT.';
   }
+
+  const data = await response.json();
+  return data.answer;
+}
 
   const data = await response.json();
   return data.answer;
