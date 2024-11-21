@@ -9,8 +9,8 @@ from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 
-# Konfigurera CORS för att endast tillåta förfrågningar från din GitHub Pages URL
-CORS(app, resources={r"/*": {"origins": "https://thomassimplineers.github.io"}})
+# Tillåt alla domäner temporärt för att felsöka CORS
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 # Rate Limiting
 limiter = Limiter(
