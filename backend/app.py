@@ -11,9 +11,7 @@ from flask_limiter.util import get_remote_address
 app = Flask(__name__)
 
 # Uppdaterad CORS-konfiguration
-CORS(app, resources={r"/ask_gpt": {"origins": "https://thomassimplineers.github.io"}},
-     allow_headers=["Content-Type", "Authorization"],
-     supports_credentials=True)
+CORS(app, resources={r"/ask_gpt": {"origins": "https://thomassimplineers.github.io"}}, supports_credentials=True)
 
 # Rate Limiting för att förhindra missbruk av API:t
 limiter = Limiter(
@@ -31,11 +29,11 @@ backend_api_key = os.getenv('BACKEND_API_KEY')
 player_data = pd.read_csv('data/players_raw.csv')
 
 # Route för att ställa frågor till GPT
-@app.route('/ask_gpt', methods=['POST', 'OPTIONS'])
 @limiter.limit("10 per minute", methods=["POST"])
+@app.route('/ask_gpt', methods=['POST', 'OPTIONS'])
 def ask_gpt():
     if request.method == 'OPTIONS':
-        # Hantera preflight-förfrågan
+        # Hantera preflight-förfrågningar och lägg till nödvändiga headers
         response = make_response()
         response.headers.add("Access-Control-Allow-Origin", "https://thomassimplineers.github.io")
         response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
