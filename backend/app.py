@@ -1,4 +1,4 @@
-from flask import Flask, send_file
+from flask import Flask, send_file, request, jsonify
 import os
 import pandas as pd
 from io import BytesIO
@@ -47,6 +47,37 @@ def download_excel():
         as_attachment=True,
         attachment_filename='player_data.xlsx'
     )
+
+# Route för att beräkna bästa laget inom budget
+@app.route('/optimize_team', methods=['POST'])
+def optimize_team():
+    if player_data.empty:
+        return jsonify({"error": "Ingen spelar-data tillgänglig"}), 404
+    
+    data = request.get_json()
+    budget = data.get('budget', 100.0)  # Standardbudget är 100 miljoner
+
+    # Beräkna VFM för varje spelare (Poäng per miljon)
+    player_data['VFM'] = player_data['total_points'] / player_data['now_cost']
+
+    # Välj spelare baserat på budget och VFM
+    selected_players = []
+    remaining_budget = budget * 10  # Budgeten är i miljoner (konvertera till samma enhet som 'now_cost')
+    
+    # Sortera spelare efter VFM
+    sorted_players = player_data.sort_values(by='VFM', ascending=False)
+
+    for _, player in sorted_players.iterrows():
+        if player['now_cost'] <= remaining_budget and len(selected_players) < 15:
+            selected_players.append(player)
+            remaining_budget -= player['now_cost']
+
+    # Skapa en lista över valda spelare
+    selected_players_data = pd.DataFrame(selected_players)
+
+    # Omvandla till JSON-format för frontend
+    result = selected_players_data.to_dict(orient='records')
+    return jsonify({"team": result, "remaining_budget": remaining_budget / 10})  # Återställa budgeten till miljoner
 
 # Kör applikationen (endast för lokal utveckling, inte i produktionsmiljö)
 if __name__ == '__main__':
