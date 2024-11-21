@@ -20,7 +20,8 @@ async function askGPT(question) {
     const response = await fetch('https://fpl-analyzer-backend.herokuapp.com/ask_gpt', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': 'DinBackendAPIKey'  // Ersätt med den faktiska backend API-nyckeln
       },
       body: JSON.stringify({ question: question })
     });
