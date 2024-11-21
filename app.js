@@ -20,7 +20,7 @@ async function askGPT(question) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'din-backend-api-nyckel-här'  // Lägg till din BACKEND_API_KEY här
+      'Authorization': 'my_secure_key_12345'  // Lägg till din BACKEND_API_KEY här
     },
     body: JSON.stringify({ question: question })
   });
