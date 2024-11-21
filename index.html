@@ -10,7 +10,18 @@
     <div class="container">
         <h1>FPL Analyzer</h1>
         <button id="download-button">Ladda ner Spelardata</button>
+
+        <!-- Uppgiftshanterare -->
+        <div id="task-container">
+            <h2>Uppgiftshanterare</h2>
+            <form id="task-form">
+                <input type="text" id="task-input" placeholder="Lägg till en uppgift..." required>
+                <button type="submit">Lägg till</button>
+            </form>
+            <ul id="task-list"></ul>
+        </div>
     </div>
     <script src="app.js" defer></script>
+    <script src="script.js" defer></script>
 </body>
 </html>
