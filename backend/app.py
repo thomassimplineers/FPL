@@ -11,7 +11,10 @@ from flask_limiter.util import get_remote_address
 app = Flask(__name__)
 
 # CORS-konfiguration för att tillåta cross-origin-förfrågningar från GitHub Pages
-CORS(app, resources={r"/*": {"origins": "https://thomassimplineers.github.io"}})
+CORS(app, resources={r"/*": {"origins": "https://thomassimplineers.github.io"}}, 
+     supports_credentials=True,
+     allow_headers=["Content-Type", "Authorization", "Access-Control-Allow-Credentials"],
+     methods=["GET", "POST", "OPTIONS"])
 
 # Rate Limiting för att förhindra missbruk av API:t
 limiter = Limiter(
