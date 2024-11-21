@@ -1,6 +1,5 @@
-from flask import Flask, request, jsonify, send_file, abort, make_response
+from flask import Flask, request, send_file, abort, make_response
 import os
-import openai
 from flask_cors import CORS
 import pandas as pd
 from io import BytesIO
@@ -11,7 +10,7 @@ from flask_limiter.util import get_remote_address
 app = Flask(__name__)
 
 # Uppdaterad CORS-konfiguration
-CORS(app, resources={r"/ask_gpt": {"origins": "https://thomassimplineers.github.io"}}, supports_credentials=True)
+CORS(app, resources={r"/*": {"origins": "https://thomassimplineers.github.io"}}, supports_credentials=True)
 
 # Rate Limiting för att förhindra missbruk av API:t
 limiter = Limiter(
@@ -21,46 +20,10 @@ limiter = Limiter(
     headers_enabled=True
 )
 
-# Hämta API-nycklar från miljövariabler
-openai.api_key = os.getenv('OPENAI_API_KEY')
-backend_api_key = os.getenv('BACKEND_API_KEY')
-
 # Ladda in data från CSV-fil
-player_data = pd.read_csv('data/players_raw.csv')
-
-# Route för att ställa frågor till GPT
-@limiter.limit("10 per minute", methods=["POST"])
-@app.route('/ask_gpt', methods=['POST', 'OPTIONS'])
-def ask_gpt():
-    if request.method == 'OPTIONS':
-        # Hantera preflight-förfrågningar och lägg till nödvändiga headers
-        response = make_response()
-        response.headers.add("Access-Control-Allow-Origin", "https://thomassimplineers.github.io")
-        response.headers.add("Access-Control-Allow-Headers", "Content-Type,Authorization")
-        response.headers.add("Access-Control-Allow-Methods", "POST,OPTIONS")
-        return response
-
-    # Kontrollera API-nyckel från förfrågan
-    request_api_key = request.headers.get('Authorization')
-    if request_api_key != backend_api_key:
-        return abort(401)  # Unauthorized
-
-    # Bearbeta GPT-förfrågan
-    data = request.get_json()
-    question = data.get('question', '')
-    prompt = f"Analysera följande data och besvara frågan: {question}\nData: {player_data.head(5).to_json(orient='records')}"
-
-    try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",
-            prompt=prompt,
-            max_tokens=150
-        )
-        answer = response.choices[0].text.strip()
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
-
-    return jsonify({'answer': answer})
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DATA_PATH = os.path.join(BASE_DIR, 'data', 'players_raw.csv')
+player_data = pd.read_csv(DATA_PATH)
 
 # Route för att ladda ner Excel-fil (exempel på annan route)
 @app.route('/download_excel', methods=['GET'])
@@ -77,6 +40,11 @@ def download_excel():
         as_attachment=True,
         attachment_filename='player_data.xlsx'
     )
+
+# Test-endpoint för felsökning
+@app.route('/test', methods=['GET'])
+def test():
+    return 'Test-endpointen fungerar!'
 
 # Kör applikationen (endast för lokal utveckling, inte i produktionsmiljö)
 if __name__ == '__main__':
