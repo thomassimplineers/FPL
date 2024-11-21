@@ -9,7 +9,7 @@ app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "https://thomassimplineers.github.io"}})
 
 # Sätt OpenAI API-nyckel
-openai.api_key = os.getenv('OPENAI_API_KEY')
+openai.api_key = os.getenv('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')
 
 # Ladda data
 player_data = pd.read_csv('data/players_raw.csv')
