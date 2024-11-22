@@ -34,6 +34,11 @@ body {
     align-items: center;
 }
 
+.logo img {
+    width: 150px;
+    height: auto;
+}
+
 .nav ul {
     list-style: none;
     display: flex;
@@ -72,6 +77,7 @@ body {
     text-align: center;
     color: #fff;
     overflow: hidden;
+    padding-top: 80px; /* To avoid overlap with fixed header */
 }
 
 .video-background {
@@ -240,4 +246,11 @@ body {
 
 .social-icons img {
     width: 30px;
+}
+
+/* Logo Styling */
+.logo img {
+    width: 120px;
+    height: auto;
+    max-width: 100%;
 }
