@@ -115,6 +115,7 @@ body {
 .cta-buttons {
     display: flex;
     gap: 20px;
+    justify-content: center;
 }
 
 .cta {
@@ -141,6 +142,9 @@ body {
     max-width: 500px;
     border-radius: 5px;
     border: 2px solid #ff6b6b;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 /* Features Section */
