@@ -3,25 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FPL Analyzer</title>
+    <title>FPL Analyzer - Maximera Ditt Lag</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>FPL Analyzer</h1>
-        <button id="download-analysis-button">Ladda ner Analyserad Spelardata</button>
-
-        <!-- Uppgiftshanterare -->
-        <div id="task-container">
-            <h2>Uppgiftshanterare</h2>
-            <form id="task-form">
-                <input type="text" id="task-input" placeholder="Lägg till en uppgift..." required>
-                <button type="submit">Lägg till</button>
-            </form>
-            <ul id="task-list"></ul>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <img src="logo.png" alt="FPL Analyzer Logotyp">
+            </div>
+            <nav class="nav">
+                <ul>
+                    <li><a href="#features">Funktioner</a></li>
+                    <li><a href="#how-it-works">Hur det fungerar</a></li>
+                    <li><a href="#about">Om oss</a></li>
+                    <li><a href="#contact">Kontakt</a></li>
+                </ul>
+            </nav>
+            <a href="#" class="cta-button">Prova Gratis</a>
         </div>
-    </div>
-    <script src="app.js" defer></script>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-container">
+            <h1>Maximera dina Fantasy Premier League-poäng med AI-drivna analyser!</h1>
+            <p>Använd den senaste statistiken och avancerade algoritmer för att skapa det ultimata laget.</p>
+            <div class="cta-buttons">
+                <button id="download-button" class="cta">Ladda ner Spelardata</button>
+                <button id="ask-button" class="cta">Fråga AI</button>
+            </div>
+            <input type="text" id="question-input" placeholder="Ställ en fråga...">
+            <div id="answer-output"></div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container features-container">
+            <div class="feature">
+                <img src="maximize_points_icon.png" alt="Maximera Poäng">
+                <h3>Maximera poäng</h3>
+                <p>Använd statistik och AI för att optimera ditt lag och få högsta möjliga poäng.</p>
+            </div>
+            <div class="feature">
+                <img src="key_variables_icon.png" alt="Analysera Nyckelvariabler">
+                <h3>Analysera Nyckelvariabler</h3>
+                <p>Analysera prestanda, matcher och motstånd för att göra smarta val.</p>
+            </div>
+            <div class="feature">
+                <img src="vfm_icon.png" alt="Value for Money">
+                <h3>Value for Money</h3>
+                <p>Hitta de bästa spelarna för pengarna med avancerade beräkningar av VFM.</p>
+            </div>
+            <div class="feature">
+                <img src="ai_advice_icon.png" alt="AI-driven Rådgivning">
+                <h3>AI-driven Rådgivning</h3>
+                <p>Få personliga rekommendationer baserade på statistik och kommande matcher.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container how-it-works-container">
+            <h2>Hur det fungerar</h2>
+            <div class="step">
+                <img src="step1_icon.png" alt="Steg 1">
+                <h3>Steg 1</h3>
+                <p>Ladda upp ditt nuvarande lag eller analysera en specifik spelare.</p>
+            </div>
+            <div class="step">
+                <img src="step2_icon.png" alt="Steg 2">
+                <h3>Steg 2</h3>
+                <p>Algoritmen analyserar data och ger optimeringsförslag.</p>
+            </div>
+            <div class="step">
+                <img src="step3_icon.png" alt="Steg 3">
+                <h3>Steg 3</h3>
+                <p>Implementera förslagen och följ resultaten i realtid.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-container">
+            <nav class="footer-nav">
+                <ul>
+                    <li><a href="#features">Funktioner</a></li>
+                    <li><a href="#how-it-works">Hur det fungerar</a></li>
+                    <li><a href="#about">Om oss</a></li>
+                    <li><a href="#contact">Kontakt</a></li>
+                </ul>
+            </nav>
+            <div class="footer-info">
+                <p>Kontakta oss: <a href="mailto:info@fplanalyzer.com">info@fplanalyzer.com</a></p>
+                <p>Följ oss på sociala medier:</p>
+                <div class="social-icons">
+                    <a href="#"><img src="facebook_icon.png" alt="Facebook"></a>
+                    <a href="#"><img src="twitter_icon.png" alt="Twitter"></a>
+                    <a href="#"><img src="instagram_icon.png" alt="Instagram"></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
     <script src="script.js" defer></script>
 </body>
 </html>
